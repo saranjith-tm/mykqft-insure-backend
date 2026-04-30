@@ -1,12 +1,12 @@
 import os
-import json
-from fastapi import APIRouter, UploadFile, File, Form, HTTPException
+from fastapi import APIRouter, UploadFile, File, Form
 from pydantic import BaseModel
 from typing import List, Optional, Dict, Any
 from services.extraction_service import ExtractionService
 
 router = APIRouter(tags=["Extraction"])
 extraction_service = ExtractionService()
+azure_model_id = os.getenv("AZURE_DOCUMENT_INTELLIGENCE_MODEL_ID", "prebuilt-document")
 
 class ExtractionResponse(BaseModel):
     success: bool
@@ -27,9 +27,6 @@ async def extract_document(
     try:
         file_bytes = await file.read()
         filename = file.filename
-        
-        # Use model ID from environment variables
-        azure_model_id = os.getenv("AZURE_DOCUMENT_INTELLIGENCE_MODEL_ID", "prebuilt-document")
         
         merged_data, page_images, fallback_logs = await extraction_service.run_extraction(
             file_bytes=file_bytes,
