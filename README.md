@@ -117,3 +117,20 @@ curl -X POST "http://localhost:8000/extract" \
 
 You can use the provided Swagger UI (`/docs`) to upload files and see the agentic fallback logs in real-time. The logs will detail exactly which fields were corrected by the VLM agent.
 # mykqft-insure-backend
+
+
+backend/
+├── main.py                     # 🚀 Application entry point & FastAPI setup
+├── routes/                     # 🛣️ API Endpoint Layer
+│   └── extraction_routes.py    # Document upload and extraction triggers
+├── services/                   # 🧠 Business Logic Layer
+│   ├── extraction_service.py   # Orchestrates the full extraction workflow
+│   └── helpers/                # Logic offloading (e.g., VLM fallback logic)
+├── agents/                     # 🤖 Agentic Layer (Powered by Agno)
+│   ├── orchestrator_agent.py   # High-level "Manager" agent
+│   ├── vlm_specialist_agent.py # "Vision" specialist for re-reading low-confidence data
+│   ├── llm_clients/            # Factory pattern for OpenAI, Google, and OpenRouter
+│   ├── tools/                  # Capabilities (Azure OCR, PDF Processing, Image Cropping)
+│   └── prompts/                # Specialized instructions for each AI agent
+├── pyproject.toml              # 📦 Dependency management
+└── .env                        # ⚙️ Configuration (API Keys, Model IDs)
